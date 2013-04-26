@@ -15,7 +15,20 @@ namespace MobileInception.Interactivity
 {
 	public abstract class Behavior : IAttachedObject
 	{
-		public NSObject AssociatedObject { get; private set; }
+		public NSObject AssociatedObject { 
+			get {
+				NSObject @object;
+				if (AssociatedObjectWeak.TryGetTarget (out @object))
+					return @object;
+				return null;
+			}
+
+			private set {
+				AssociatedObjectWeak = new WeakReference<NSObject> (value);
+			} 
+		}
+
+		WeakReference<NSObject> AssociatedObjectWeak { get; set; }
 
 		public void Attach (NSObject target)
 		{

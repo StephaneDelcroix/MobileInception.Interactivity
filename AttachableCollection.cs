@@ -27,7 +27,18 @@ namespace MobileInception.Interactivity
 			AssociatedObject = null;
 		}
 
-		public NSObject AssociatedObject { get; private set; }
+		public NSObject AssociatedObject { 
+			get {
+				NSObject @object;
+				if (AssociatedObjectWeak.TryGetTarget (out @object))
+					return @object;
+				return null;
+			}
+
+			private set { AssociatedObjectWeak = new WeakReference<NSObject> (value); } 
+		}
+
+		WeakReference<NSObject> AssociatedObjectWeak { get; set; }
 
 		protected abstract void OnAttached ();
 		protected abstract void OnDetaching ();
